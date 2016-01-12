@@ -1,0 +1,46 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+
+    <f:entry title="Server URL" field="serverUrl">
+        <f:textbox name="serverUrl"/>
+    </f:entry>
+
+    <f:entry title="User Name" field="userName">
+        <f:textbox name="userName"/>
+    </f:entry>
+
+    <f:entry title="Password" field="password">
+        <f:password name="password"/>
+    </f:entry>
+
+    <!-- Need to add support when it works in vRO -->
+    <!--<f:entry title="Tenant" field="tenant">-->
+        <!--<f:textbox name="tenant"/>-->
+    <!--</f:entry>-->
+
+    <f:entry title="Workflow Name" field="workflowName">
+        <f:textbox name="workflowName"/>
+    </f:entry>
+
+    <f:entry title="Execute and Wait" field="waitExec">
+        <f:checkbox name="waitExec"/>
+    </f:entry>
+
+    <f:entry title="Workflow Input Parameters">
+        <f:repeatable name="inputParams" field="inputParams" noAddButton="false" add="Add Parameter">
+            <table width="100%">
+                <f:entry title="Parameter Name" field="name">
+                    <f:select/>
+                </f:entry>
+                <f:entry title="Parameter Value" field="value">
+                    <f:textbox name="value"/>
+                </f:entry>
+                <div align="right" class="repeatable-delete show-if-only" style="margin-left: 1em;">
+                    <f:repeatableDeleteButton value="Delete Parameter"/>
+                    <br/>
+                </div>
+            </table>
+        </f:repeatable>
+    </f:entry>
+</j:jelly>
