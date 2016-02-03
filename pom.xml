@@ -16,7 +16,7 @@
 
     <name>vRealize Orchestrator Plugin</name>
     <description>Plugin for executing workflow on VMware vRealize Orchestrator.</description>
-    <url>https:https://wiki.jenkins-ci.org/display/JENKINS/VMware+vRealize+Orchestrator+Plugin</url>
+    <url>https://wiki.jenkins-ci.org/display/JENKINS/VMware+vRealize+Orchestrator+Plugin</url>
     <licenses>
         <license>
             <name>MIT License</name>
