@@ -1,6 +1,7 @@
 package com.vmware.vro.jenkins.plugin.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -8,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Created by agovindaraju on 1/9/2016.
  */
-public class BuildParam {
+public class BuildParam implements Serializable {
     private final String serverUrl;
     private final String userName;
     private final String password;

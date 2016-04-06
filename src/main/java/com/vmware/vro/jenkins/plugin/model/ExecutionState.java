@@ -1,9 +1,11 @@
 package com.vmware.vro.jenkins.plugin.model;
 
+import java.io.Serializable;
+
 /**
  * Created by agovindaraju on 1/10/2016.
  */
-public class ExecutionState {
+public class ExecutionState implements Serializable {
 
     private String state;
     private boolean completed;

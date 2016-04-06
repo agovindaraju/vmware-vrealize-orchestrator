@@ -1,9 +1,11 @@
 package com.vmware.vro.jenkins.plugin.model;
 
+import java.io.Serializable;
+
 /**
  * Created by agovindaraju on 1/11/2016.
  */
-public class Workflow {
+public class Workflow implements Serializable {
     private String name;
     private String id;
 
