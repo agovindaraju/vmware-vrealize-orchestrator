@@ -131,6 +131,9 @@ public class OrchestratorClient {
                 .format(WORKFLOW_EXECUTION_SERVICE, buildParam.getServerUrl(), getEncodedString(
                         buildParam.getWorkflowName()));
         String payLoad = constructRequestPayload(buildParam.getInputParams());
+        if (StringUtils.isBlank(payLoad)) {
+            payLoad = "{}";
+        }
         System.out.println("Execute Payload : " + payLoad);
         return restClient.httpPostForLocationHeader(requestUrl, payLoad);
     }
