@@ -36,6 +36,7 @@ public class OrchestratorClient {
     //JSON keys
     private static final String INPUT_PARAMETERS = "input-parameters";
     private static final String OUTPUT_PARAMETERS = "output-parameters";
+    private static final String CONTENT_EXCEPTION = "content-exception";
     private static final String NAME = "name";
     private static final String TYPE = "type";
     private static final String VALUE = "value";
@@ -174,6 +175,10 @@ public class OrchestratorClient {
         if (responseJson.has(OUTPUT_PARAMETERS)) {
             JsonArray jsonArray = responseJson.getAsJsonArray(OUTPUT_PARAMETERS);
             executionOutput.setParameters(jsonArray.toString());
+        }
+        if (responseJson.has(CONTENT_EXCEPTION)) {
+            String exception = responseJson.get(CONTENT_EXCEPTION).getAsString();
+            executionOutput.setException(exception);
         }
         return executionOutput;
     }
