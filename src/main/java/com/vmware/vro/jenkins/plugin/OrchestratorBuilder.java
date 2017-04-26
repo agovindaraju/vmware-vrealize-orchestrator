@@ -24,10 +24,7 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
-import hudson.model.EnvironmentContributingAction;
+import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
@@ -109,6 +106,9 @@ public class OrchestratorBuilder extends Builder implements Serializable {
         logger.println("Starting Orchestrator workflow execution : " + param.getWorkflowName());
         param.validate();
 
+        //Set build success bool
+        boolean success = true;
+
         OrchestratorCallable callable = new OrchestratorCallable(param);
         Map<String, String> outputParameters = launcher.getChannel().call(callable);
 
@@ -119,10 +119,18 @@ public class OrchestratorBuilder extends Builder implements Serializable {
             }
         }
 
-        OrchestratorEnvAction orchestratorAction = new OrchestratorEnvAction(outputParameters);
-        build.addAction(orchestratorAction);
+        String state = outputParameters.get("ORCHESTRATOR_WORKFLOW_EXECUTION_STATE");
 
-        return true;
+        // If the workflow run fails set the appropriate result, otherwise continue with success
+        if (state.equalsIgnoreCase("canceled") || state.equalsIgnoreCase("failed")) {
+            build.setResult(Result.FAILURE);
+            success = false;
+        } else {
+            OrchestratorEnvAction orchestratorAction = new OrchestratorEnvAction(outputParameters);
+            build.addAction(orchestratorAction);
+        }
+
+        return success;
     }
 
     public String getServerUrl() {

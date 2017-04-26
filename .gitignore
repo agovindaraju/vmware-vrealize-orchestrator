@@ -11,3 +11,7 @@ release.properties
 *.iml
 *.ipr
 *.iws
+### Additional exclusions
+.classpath
+.project
+.settings/

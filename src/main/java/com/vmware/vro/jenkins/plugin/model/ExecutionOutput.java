@@ -9,6 +9,7 @@ public class ExecutionOutput implements Serializable {
 
     private String state;
     private String parameters;
+    private String exception;
 
     public String getState() {
         return state;
@@ -24,5 +25,13 @@ public class ExecutionOutput implements Serializable {
 
     public void setParameters(String parameters) {
         this.parameters = parameters;
+    }
+
+    public String getException() {
+        return exception;
+    }
+
+    public void setException(String exception) {
+        this.exception = exception;
     }
 }
