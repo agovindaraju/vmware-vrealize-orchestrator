@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -24,10 +25,17 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
-import hudson.model.*;
+import hudson.FilePath;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.EnvironmentContributingAction;
+import hudson.model.Result;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import jenkins.tasks.SimpleBuildStep;
 
 /**
  * Sample {@link Builder}.
@@ -43,8 +51,7 @@ import hudson.util.FormValidation;
  *
  * @author Agila Govindaraju
  */
-public class OrchestratorBuilder extends Builder implements Serializable {
-
+public class OrchestratorBuilder extends Builder implements Serializable, SimpleBuildStep {
     private final String serverUrl;
     private final String userName;
     private final String password;
@@ -68,9 +75,8 @@ public class OrchestratorBuilder extends Builder implements Serializable {
     }
 
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
-            throws InterruptedException,
-            IOException {
+    public void perform(Run build, FilePath workspace, Launcher launcher,
+            TaskListener listener) throws InterruptedException, IOException {
         PrintStream logger = listener.getLogger();
         EnvVariableResolver resolver = new EnvVariableResolver(build, listener);
 
@@ -106,9 +112,6 @@ public class OrchestratorBuilder extends Builder implements Serializable {
         logger.println("Starting Orchestrator workflow execution : " + param.getWorkflowName());
         param.validate();
 
-        //Set build success bool
-        boolean success = true;
-
         OrchestratorCallable callable = new OrchestratorCallable(param);
         Map<String, String> outputParameters = launcher.getChannel().call(callable);
 
@@ -127,13 +130,10 @@ public class OrchestratorBuilder extends Builder implements Serializable {
         // If the workflow run fails set the appropriate result, otherwise continue with success
         if (state.equalsIgnoreCase("canceled") || state.equalsIgnoreCase("failed")) {
             build.setResult(Result.FAILURE);
-            success = false;
         } else {
             OrchestratorEnvAction orchestratorAction = new OrchestratorEnvAction(outputParameters);
             build.addAction(orchestratorAction);
         }
-
-        return success;
     }
 
     public String getServerUrl() {
@@ -169,8 +169,8 @@ public class OrchestratorBuilder extends Builder implements Serializable {
         return (DescriptorImpl) super.getDescriptor();
     }
 
-    @Extension
-    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
+    @Symbol("orchestratorBuilder")
+    @Extension public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
         public DescriptorImpl() {
             load();
         }

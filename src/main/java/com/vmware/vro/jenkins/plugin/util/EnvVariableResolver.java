@@ -7,7 +7,8 @@ import java.util.List;
 import com.vmware.vro.jenkins.plugin.model.Parameter;
 import hudson.EnvVars;
 import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 
 import static hudson.Util.fixEmptyAndTrim;
 
@@ -17,10 +18,14 @@ import static hudson.Util.fixEmptyAndTrim;
 public class EnvVariableResolver {
     private EnvVars environment;
 
-    public EnvVariableResolver(AbstractBuild<?, ?> build, BuildListener listener)
+    public EnvVariableResolver(Run build, TaskListener listener)
             throws IOException, InterruptedException {
         environment = build.getEnvironment(listener);
-        environment.overrideAll(build.getBuildVariables());
+        // I'm not sure where env variables get injected, but we'll probably
+        // need to fix this to prevent us from having to pass VRA creds around
+        // SEE: https://github.com/jenkinsci/pipeline-plugin/blob/master/DEVGUIDE.md#variable-substitutions
+        //vars = build.getBuildVariables();
+        //environment.overrideAll(build.getBuildVariables());
     }
 
     public String getValueForBuildParameter(String buildParam) {
