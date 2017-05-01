@@ -234,11 +234,6 @@ public class OrchestratorBuilder extends Builder implements Serializable {
                 return FormValidation.error("Please enter password.");
             }
 
-            if (password.indexOf('$') >= 0) {
-                // set by variable, can't validate
-                return FormValidation.error("Environment variable cannot be used in password.");
-            }
-
             return FormValidation.ok();
         }
 
