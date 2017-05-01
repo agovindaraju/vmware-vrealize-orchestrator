@@ -184,7 +184,7 @@ public class RestClient {
 
     private String constructAuthorizationHeader() throws UnsupportedEncodingException {
         String authentication = userName + ':' + password;
-        return new String(Base64.encodeBase64(authentication.getBytes("UTF-8")));
+        return new String(Base64.encodeBase64(authentication.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
     /*

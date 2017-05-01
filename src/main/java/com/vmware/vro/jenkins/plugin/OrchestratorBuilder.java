@@ -119,7 +119,10 @@ public class OrchestratorBuilder extends Builder implements Serializable {
             }
         }
 
-        String state = outputParameters.get("ORCHESTRATOR_WORKFLOW_EXECUTION_STATE");
+        String state = "";
+        if (outputParameters != null) {
+            state = outputParameters.get("ORCHESTRATOR_WORKFLOW_EXECUTION_STATE");
+        }
 
         // If the workflow run fails set the appropriate result, otherwise continue with success
         if (state.equalsIgnoreCase("canceled") || state.equalsIgnoreCase("failed")) {

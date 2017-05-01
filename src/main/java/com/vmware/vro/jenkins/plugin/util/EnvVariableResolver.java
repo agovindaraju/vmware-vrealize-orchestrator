@@ -27,7 +27,8 @@ public class EnvVariableResolver {
         return fixEmptyAndTrim(environment.expand(buildParam));
     }
 
-    public List<Parameter> getValueForBuildParameter(List<Parameter> workflowInputParams) {
+    public List<Parameter> getValueForBuildParameter(List<Parameter> workflowInputParams)
+						throws IOException {
         List<Parameter> inputParams = new ArrayList<Parameter>();
         if (workflowInputParams != null) {
             for (Parameter parameter : workflowInputParams) {
@@ -38,7 +39,7 @@ public class EnvVariableResolver {
                     clonedInputParam.setType(getValueForBuildParameter(clonedInputParam.getType()));
                     inputParams.add(clonedInputParam);
                 } catch (CloneNotSupportedException e) {
-                    new IOException("Not able to clone input param");
+                    throw new IOException("Not able to clone input param");
                 }
             }
         }
