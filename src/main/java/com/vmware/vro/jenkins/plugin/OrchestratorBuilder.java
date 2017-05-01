@@ -170,7 +170,8 @@ public class OrchestratorBuilder extends Builder implements Serializable, Simple
     }
 
     @Symbol("orchestratorBuilder")
-    @Extension public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
+    @Extension
+    public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
         public DescriptorImpl() {
             load();
         }

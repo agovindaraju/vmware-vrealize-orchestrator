@@ -31,6 +31,20 @@ Jenkins version supported
 ------------------------
 1.580.1 and above. To use lower version use branch version_1_565
 
+Pipeline support
+----------------
+```
+node {
+  step([$class: 'OrchestratorBuilder', serverUrl: 'https://vra.url.com', userName: 'test_username', password: 'test_password', tenant: '', workflowName: 'test_workflow', waitExec: true, inputParams: []])
+}
+```
+or
+```
+node {
+  orchestratorBuilder serverUrl: 'https://vra.url.com', userName: 'test_username', password: 'test_password', tenant: '', workflowName: 'test_workflow', waitExec: true, inputParams: []
+}
+```
+
 
 Development
 ===========
