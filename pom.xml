@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>vmware-vrealize-orchestrator</artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <version>4.0.0</version>
     <packaging>hpi</packaging>
 
     <name>vRealize Orchestrator Plugin</name>
