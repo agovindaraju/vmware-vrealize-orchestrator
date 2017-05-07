@@ -8,6 +8,7 @@ This plugin integrates [VMware vRealize Orchestrator][] to [Jenkins][]. With thi
 [VMware vRealize Orchestrator]: http://www.vmware.com/products/vrealize-orchestrator/
 [Jenkins]: https://jenkins-ci.org/
 
+
 Configuration
 -------------
 
@@ -30,6 +31,20 @@ Configuration
 Jenkins version supported
 ------------------------
 1.580.1 and above. To use lower version use branch version_1_565
+
+Pipeline support
+----------------
+```
+node {
+  step([$class: 'OrchestratorBuilder', serverUrl: 'https://vra.url.com', userName: 'test_username', password: 'test_password', tenant: '', workflowName: 'test_workflow', waitExec: true, inputParams: []])
+}
+```
+or
+```
+node {
+  orchestratorBuilder serverUrl: 'https://vra.url.com', userName: 'test_username', password: 'test_password', tenant: '', workflowName: 'test_workflow', waitExec: true, inputParams: []
+}
+```
 
 
 Development

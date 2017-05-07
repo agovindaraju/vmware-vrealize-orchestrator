@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
         <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-        <version>1.580.1</version>
-        <relativePath/>
+        <version>2.5</version>
+        <relativePath />
     </parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>vmware-vrealize-orchestrator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>4.0.1-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <name>vRealize Orchestrator Plugin</name>
     <description>Plugin for executing workflow on VMware vRealize Orchestrator.</description>
-    <url>https:https://wiki.jenkins-ci.org/display/JENKINS/VMware+vRealize+Orchestrator+Plugin</url>
+    <url>https://wiki.jenkins-ci.org/display/JENKINS/VMware+vRealize+Orchestrator+Plugin</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -35,7 +34,7 @@
     <distributionManagement>
         <repository>
             <id>maven.jenkins-ci.org</id>
-            <url>http://maven.jenkins-ci.org/content/repositories/releases/</url>
+            <url>https://repo.jenkins-ci.org/releases/</url>
         </repository>
     </distributionManagement>
 
@@ -50,13 +49,13 @@
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
+            <url>https://repo.jenkins-ci.org/public/</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
+            <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
@@ -75,5 +74,27 @@
             <artifactId>httpclient</artifactId>
             <version>4.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>structs</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.6</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-http</artifactId>
+                        <version>2.10</version>
+                        <type>jar</type>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

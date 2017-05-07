@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -24,30 +25,33 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.Util;
+import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.model.EnvironmentContributingAction;
+import hudson.model.Result;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import jenkins.tasks.SimpleBuildStep;
 
 /**
  * Sample {@link Builder}.
- * <p/>
- * <p/>
+ * <p>
  * When the user configures the project and enables this builder, {@link DescriptorImpl#newInstance(StaplerRequest)} is
  * invoked and a new {@link OrchestratorBuilder} is created. The created instance is persisted to the project
  * configuration XML by using XStream, so this allows you to use instance fields (like {@link #serverUrl}) to remember
  * the configuration.
- * <p/>
- * <p/>
+ * </p>
+ * <p>
  * When a build is performed, the {@link #perform} method will be invoked.
+ * </p>
  *
  * @author Agila Govindaraju
  */
-public class OrchestratorBuilder extends Builder implements Serializable {
-
+public class OrchestratorBuilder extends Builder implements Serializable, SimpleBuildStep {
     private final String serverUrl;
     private final String userName;
     private final String password;
@@ -71,9 +75,8 @@ public class OrchestratorBuilder extends Builder implements Serializable {
     }
 
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
-            throws InterruptedException,
-            IOException {
+    public void perform(Run build, FilePath workspace, Launcher launcher,
+            TaskListener listener) throws InterruptedException, IOException {
         PrintStream logger = listener.getLogger();
         EnvVariableResolver resolver = new EnvVariableResolver(build, listener);
 
@@ -119,10 +122,18 @@ public class OrchestratorBuilder extends Builder implements Serializable {
             }
         }
 
-        OrchestratorEnvAction orchestratorAction = new OrchestratorEnvAction(outputParameters);
-        build.addAction(orchestratorAction);
+        String state = "";
+        if (outputParameters != null) {
+            state = outputParameters.get("ORCHESTRATOR_WORKFLOW_EXECUTION_STATE");
+        }
 
-        return true;
+        // If the workflow run fails set the appropriate result, otherwise continue with success
+        if (state.equalsIgnoreCase("canceled") || state.equalsIgnoreCase("failed")) {
+            build.setResult(Result.FAILURE);
+        } else {
+            OrchestratorEnvAction orchestratorAction = new OrchestratorEnvAction(outputParameters);
+            build.addAction(orchestratorAction);
+        }
     }
 
     public String getServerUrl() {
@@ -158,8 +169,9 @@ public class OrchestratorBuilder extends Builder implements Serializable {
         return (DescriptorImpl) super.getDescriptor();
     }
 
+    @Symbol("orchestratorBuilder")
     @Extension
-    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
+    public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
         public DescriptorImpl() {
             load();
         }
@@ -221,11 +233,6 @@ public class OrchestratorBuilder extends Builder implements Serializable {
             String password = Util.fixEmptyAndTrim(value);
             if (password == null) {
                 return FormValidation.error("Please enter password.");
-            }
-
-            if (password.indexOf('$') >= 0) {
-                // set by variable, can't validate
-                return FormValidation.error("Environment variable cannot be used in password.");
             }
 
             return FormValidation.ok();
