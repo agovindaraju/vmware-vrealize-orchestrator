@@ -39,15 +39,15 @@ import jenkins.tasks.SimpleBuildStep;
 
 /**
  * Sample {@link Builder}.
- * <p/>
- * <p/>
+ * <p>
  * When the user configures the project and enables this builder, {@link DescriptorImpl#newInstance(StaplerRequest)} is
  * invoked and a new {@link OrchestratorBuilder} is created. The created instance is persisted to the project
  * configuration XML by using XStream, so this allows you to use instance fields (like {@link #serverUrl}) to remember
  * the configuration.
- * <p/>
- * <p/>
+ * </p>
+ * <p>
  * When a build is performed, the {@link #perform} method will be invoked.
+ * </p>
  *
  * @author Agila Govindaraju
  */
